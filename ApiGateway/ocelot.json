@@ -1,0 +1,115 @@
+{
+  "Routes": [
+    {
+      "DownstreamPathTemplate": "/api/product/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "product-service",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/api/product/{everything}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE", "PATCH" ],
+      "Key": "ProductService",
+      "Priority": 0,
+      "RateLimitOptions": {
+        "ClientWhitelist": [],
+        "EnableRateLimiting": true,
+        "Period": "1m",
+        "PeriodTimespan": 60,
+        "Limit": 100
+      },
+      "CacheOptions": {
+        "TtlSeconds": 300
+      },
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": [ "read", "write" ]
+      },
+      "RouteClaimsRequirement": {
+        "role": "user"
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/product/health",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "product-service",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/api/product/health",
+      "UpstreamHttpMethod": [ "GET" ],
+      "Key": "ProductServiceHealth",
+      "Priority": 1,
+      "AllowAnonymous": true,
+      "CacheOptions": {
+        "TtlSeconds": 30
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/order/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "order-service",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/api/order/{everything}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE", "PATCH" ],
+      "Key": "OrderService",
+      "Priority": 0,
+      "RateLimitOptions": {
+        "ClientWhitelist": [],
+        "EnableRateLimiting": true,
+        "Period": "1m",
+        "PeriodTimespan": 60,
+        "Limit": 100
+      },
+      "CacheOptions": {
+        "TtlSeconds": 300
+      },
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": [ "read", "write" ]
+      },
+      "RouteClaimsRequirement": {
+        "role": "user"
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/order/health",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "order-service",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/api/order/health",
+      "UpstreamHttpMethod": [ "GET" ],
+      "Key": "OrderServiceHealth",
+      "Priority": 1,
+      "AllowAnonymous": true,
+      "CacheOptions": {
+        "TtlSeconds": 30
+      }
+    }
+  ],
+  "GlobalConfiguration": {
+    "BaseUrl": "http://localhost:5000",
+    "RateLimitOptions": {
+      "ClientIdHeader": "X-ClientId",
+      "QuotaExceededMessage": "You have exceeded the maximum number of requests allowed. Please try again later.",
+      "RateLimitCounterPrefix": "ocelot_rate_limit_",
+      "DisableRateLimitHeaders": false,
+      "HttpStatusCode": 429
+    },
+    "CacheOptions": {
+      "MaxCacheSize": 10000
+    }
+  }
+}

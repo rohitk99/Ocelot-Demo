@@ -1,0 +1,130 @@
+{
+  "Routes": [
+    {
+      "DownstreamPathTemplate": "/api/product/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "product-service.ocelot-microservices.svc.cluster.local",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/api/product/{everything}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE", "PATCH" ],
+      "Key": "ProductService",
+      "Priority": 0,
+      "RateLimitOptions": {
+        "ClientWhitelist": [],
+        "EnableRateLimiting": true,
+        "Period": "1m",
+        "PeriodTimespan": 60,
+        "Limit": 150
+      },
+      "CacheOptions": {
+        "TtlSeconds": 600
+      },
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": [ "read", "write" ]
+      },
+      "RouteClaimsRequirement": {
+        "role": "user"
+      },
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 3,
+        "DurationOfBreak": 5000,
+        "TimeoutValue": 5000
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/product/health",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "product-service.ocelot-microservices.svc.cluster.local",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/api/product/health",
+      "UpstreamHttpMethod": [ "GET" ],
+      "Key": "ProductServiceHealth",
+      "Priority": 1,
+      "AllowAnonymous": true,
+      "CacheOptions": {
+        "TtlSeconds": 30
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/order/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "order-service.ocelot-microservices.svc.cluster.local",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/api/order/{everything}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE", "PATCH" ],
+      "Key": "OrderService",
+      "Priority": 0,
+      "RateLimitOptions": {
+        "ClientWhitelist": [],
+        "EnableRateLimiting": true,
+        "Period": "1m",
+        "PeriodTimespan": 60,
+        "Limit": 150
+      },
+      "CacheOptions": {
+        "TtlSeconds": 600
+      },
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": [ "read", "write" ]
+      },
+      "RouteClaimsRequirement": {
+        "role": "user"
+      },
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 3,
+        "DurationOfBreak": 5000,
+        "TimeoutValue": 5000
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/order/health",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "order-service.ocelot-microservices.svc.cluster.local",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/api/order/health",
+      "UpstreamHttpMethod": [ "GET" ],
+      "Key": "OrderServiceHealth",
+      "Priority": 1,
+      "AllowAnonymous": true,
+      "CacheOptions": {
+        "TtlSeconds": 30
+      }
+    }
+  ],
+  "GlobalConfiguration": {
+    "BaseUrl": "https://api.example.com",
+    "RateLimitOptions": {
+      "ClientIdHeader": "X-ClientId",
+      "QuotaExceededMessage": "You have exceeded the maximum number of requests allowed. Please try again later.",
+      "RateLimitCounterPrefix": "ocelot_rate_limit_",
+      "DisableRateLimitHeaders": false,
+      "HttpStatusCode": 429
+    },
+    "CacheOptions": {
+      "MaxCacheSize": 50000
+    },
+    "ServiceDiscoveryProvider": {
+      "Type": "Kubernetes",
+      "Host": "127.0.0.1",
+      "Port": 8001
+    }
+  }
+}
