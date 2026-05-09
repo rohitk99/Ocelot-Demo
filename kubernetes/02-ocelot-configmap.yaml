@@ -1,0 +1,52 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ocelot-config
+  namespace: ocelot-microservices
+data:
+  ocelot.json: |
+    {
+      "Routes": [
+        {
+          "DownstreamPathTemplate": "/api/product/{everything}",
+          "DownstreamScheme": "http",
+          "DownstreamHostAndPorts": [
+            {
+              "Host": "product-service",
+              "Port": 80
+            }
+          ],
+          "UpstreamPathTemplate": "/api/product/{everything}",
+          "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ],
+          "RateLimitOptions": {
+            "ClientWhitelist": [],
+            "EnableRateLimiting": true,
+            "Period": "1m",
+            "PeriodTimespan": 60.0,
+            "Limit": 100
+          }
+        },
+        {
+          "DownstreamPathTemplate": "/api/order/{everything}",
+          "DownstreamScheme": "http",
+          "DownstreamHostAndPorts": [
+            {
+              "Host": "order-service",
+              "Port": 80
+            }
+          ],
+          "UpstreamPathTemplate": "/api/order/{everything}",
+          "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ],
+          "RateLimitOptions": {
+            "ClientWhitelist": [],
+            "EnableRateLimiting": true,
+            "Period": "1m",
+            "PeriodTimespan": 60.0,
+            "Limit": 100
+          }
+        }
+      ],
+      "GlobalConfiguration": {
+        "BaseUrl": "http://api-gateway:80"
+      }
+    }
